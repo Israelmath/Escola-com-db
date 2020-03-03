@@ -12,30 +12,26 @@ import sqlite3
 
 SENHA = 'avaiana41'
 
-connection = sqlite3.connect('/home/israel/Documentos/Cursos/Programas/Escola_com_db/alunos.db')
+connection = sqlite3.connect('Alunos.db')
 
 cursor = connection.cursor()
 
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS alunos (
-        id TEXT NOT NULL,
-        nome TEXT NOT NULL,
-        celular TEXT NOT NULL,
-        cep TEXT NOT NULL
-    );
-''')
-
 class Usuario:
 
-    def __init__(self, id, nome, numero, cep):
+    def __init__(self, id, nome, sobrenome, celular, cep):
         self.__id = id
         self.__nome = nome
-        self.__numero = numero
+        self.__sobrenome = sobrenome
+        self.__celular = celular
         self.__cep = cep
 
     @property
-    def numero(self):
-        return self.__numero
+    def celular(self):
+        return self.__celular
+
+    @property
+    def sobrenome(self):
+        return self.__sobrenome
 
     @property
     def cep(self):
@@ -53,16 +49,20 @@ class Usuario:
     def id(self, novo_id):
         self.__id = novo_id
 
-    @numero.setter
-    def numero(self, novo_numero):
-        self.__numero = novo_numero
+    @celular.setter
+    def celular(self, novo_celular):
+        self.__celular = novo_celular
 
     @nome.setter
     def nome(self, novo_nome):
         self.__nome = novo_nome
 
+    @sobrenome.setter
+    def sobrenome(self, novo_sobrenome):
+        self.__sobrenome = novo_sobrenome
+
     def __str__(self):
-        return '{},{}'.format(self.nome, self.numero)
+        return '{},{}'.format(self.nome, self.celular)
 
 
 class UsuariosCadastrados(list):
@@ -90,7 +90,8 @@ def entrada_do_usuario():
     while i < 3:
         if choice.isnumeric():
             if choice == '0':
-                print('\033[1;35mPrograma desligando...\033[m')
+                print('\033[1;35mPrograma desligando2...\033[m')
+                connection.close()
                 exit()
             elif int(choice) in range(1, 4):
                 return choice
@@ -103,14 +104,15 @@ def entrada_do_usuario():
             print(f'Você tem mais {3 - i} chances')
             choice = input('-----> ')
         i += 1
-    print('\033[1;35mPrograma desligando...\033[m')
+    print('\033[1;35mPrograma desligando3...\033[m')
+    connection.close()
     exit()
 
 
-def mkuser(id, nome, numero):
+def cria_aluno(id, nome, sobrenome, celular, cep):
     print('\033[35mAdicionando usuário no banco de dados. Aguarde...\033[m')
-    user = Usuario(id, nome, numero)
-    imprime_lista(user)
+    user = Usuario(id, nome, sobrenome, celular, cep)
+    guarda_no_bd(user)
     return user
 
 
@@ -127,6 +129,7 @@ def mostra_cadastro(choice):
     else:
         return False
 
+
 def exclui_usuario(choice):
     if choice == '3':
         return True
@@ -134,33 +137,51 @@ def exclui_usuario(choice):
         return False
 
 
-def imprime_lista(usuario):
+def guarda_no_bd(usuario):
 
-    saida = open('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv', 'a')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS alunos (
+            id TEXT NOT NULL,
+            nome TEXT NOT NULL,
+            sobrenome TEXT NOT NULL,
+            celular TEXT NOT NULL,
+            cep TEXT NOT NULL
+        );
+        ''')
 
-    saida.write(str(usuario.id))
-    saida.write(',')
-    saida.write(str(usuario))
-    saida.write('\n')
+    print(usuario.nome)
+    cursor.execute(f'''
+        INSERT INTO alunos (id, nome, sobrenome, celular, cep)
+        VALUES ('{usuario.id}', '{usuario.nome}', '{usuario.sobrenome}', '{usuario.celular}', '{usuario.cep}')
+    ''')
 
-    saida.close()
+    connection.commit()
 
 
 def imprime_usuarios_cadastrados():
-    data = pd.read_csv('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv')
-    print(data.head())
+
+    cursor.execute(f'''
+        SELECT id, nome, sobrenome, celular, cep FROM alunos
+    ''')
+    if cursor.rowcount == 0:
+        print('Nenhum aluno encontrado')
+    else:
+        for aluno in cursor.fetchall():
+            print(aluno)
 
 
 def usuario_existe(usuario):
-    if not os.path.exists('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv'):
-        return False
+
+    cursor.execute(f'''
+        SELECT nome FROM alunos
+        WHERE nome = '{usuario}'
+    ''')
+
+    print(cursor.rowcount)
+
+    if cursor.rowcount != 0:
+        return True
     else:
-        data = pd.read_csv('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv')
-        i = 0
-        for nome in data['Usuário']:
-            if data['Usuário'][i] == usuario:
-                i += 1
-                return True
         return False
 
 
@@ -200,7 +221,7 @@ def atualiza_usuarios(data):
     print(data.head())
     cadastro = []
     for user in data.itertuples():
-        usuario = Usuario(user[1], user[2], user[3])
+        usuario = Usuario(user[1], user[2], user[3], user[4])
         cadastro.append(usuario)
     usuarios = UsuariosCadastrados(cadastro)
     os.remove('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv')
@@ -209,53 +230,60 @@ def atualiza_usuarios(data):
         imprime_lista(user)
 
 
-def reinicia_programa():
-
-    if not os.path.exists('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv'):
-        saida = open('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv', 'a')
-        saida.write("Id,Usuário,Número")
-        saida.write('\n')
-    else:
-        if os.path.exists('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv'):
-            data = pd.read_csv('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv')
-            cadastro = []
-            for user in data.itertuples():
-                usuario = Usuario(user[1], user[2], user[3])
-                cadastro.append(usuario)
-            usuarios = UsuariosCadastrados(cadastro)
-            return usuarios
+# def reinicia_programa():
+#
+#     cursor.execute('''
+#         CREATE TABLE IF NOT EXISTS alunos (
+#             id TEXT NOT NULL,
+#             nome TEXT NOT NULL,
+#             celular TEXT NOT NULL,
+#             cep TEXT NOT NULL
+#         );
+#     ''')
+#
+#     cursor.execute(f'''
+#         SELECT id, nome, celular, cep FROM alunos
+#     ''')
+#
+#     cadastro = []
+#     print(cursor.rowcount)
+#     if cursor.rowcount == 0:
+#         print('Não há alunos no banco de dados')
+#     else:
+#         for usuario in cursor.fetchall():
+#             usuario = Usuario(usuario[1], usuario[2], usuario[3], usuario[4])
+#             cadastro.append(usuario)
+#         usuarios = UsuariosCadastrados(cadastro)
+#
+#         for usuario in usuarios:
+#             print(usuario)
+#     return usuarios
 
 
 def main():
 
-    data = reinicia_programa()
     cria_menu()
     choice = entrada_do_usuario()
-    usuarios = []
 
     while True:
+
         if adiciona_aluno(choice):
-            nome = input('Digite nome do usuário: ')
-            numero = input('Digite o telefone do usuário: ')
+            nome = input('Digite nome do aluno: ')
+            sobrenome = input('Digite sobrenome do aluno: ')
+            numero = input('Digite o telefone/celular do aluno: ')
+            cep = input('Digite o cep do aluno: ')
+            cria_aluno(randint(1000, 10000), nome, sobrenome, numero, cep)
 
-            if usuario_existe(nome):
-                print(f'\033[37mO usuário {nome} já existe\033[m.')
-            else:
-                user = mkuser(randint(1000, 10000), nome, numero)
-                usuarios.append(user)
-
-        if mostra_cadastro(choice):
+        elif mostra_cadastro(choice):
             imprime_usuarios_cadastrados()
 
-        if exclui_usuario(choice):
-            deleta_usuario()
+        else:
+            print('\033[1;35mPrograma desligando1...\033[m')
+            connection.close()
+            exit()
 
         cria_menu()
         choice = entrada_do_usuario()
-
-
-    print('\033[1;35mPrograma desligando...\033[m')
-    exit()
 
 
 main()
