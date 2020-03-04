@@ -6,8 +6,8 @@ Obs. No arquivo de saída, as informações de cada usuário deverão estar em u
 
 """
 from random import randint
-import os
-import pandas as pd
+from Individuos import Usuario
+from Verificadores import *
 import sqlite3
 
 SENHA = 'avaiana41'
@@ -16,84 +16,30 @@ connection = sqlite3.connect('Alunos.db')
 
 cursor = connection.cursor()
 
-class Usuario:
-
-    def __init__(self, id, nome, sobrenome, celular, cep):
-        self.__id = id
-        self.__nome = nome
-        self.__sobrenome = sobrenome
-        self.__celular = celular
-        self.__cep = cep
-
-    @property
-    def celular(self):
-        return self.__celular
-
-    @property
-    def sobrenome(self):
-        return self.__sobrenome
-
-    @property
-    def cep(self):
-        return self.__cep
-
-    @property
-    def id(self):
-        return self.__id
-
-    @property
-    def nome(self):
-        return self.__nome
-
-    @id.setter
-    def id(self, novo_id):
-        self.__id = novo_id
-
-    @celular.setter
-    def celular(self, novo_celular):
-        self.__celular = novo_celular
-
-    @nome.setter
-    def nome(self, novo_nome):
-        self.__nome = novo_nome
-
-    @sobrenome.setter
-    def sobrenome(self, novo_sobrenome):
-        self.__sobrenome = novo_sobrenome
-
-    def __str__(self):
-        return '{},{}'.format(self.nome, self.celular)
-
-
-class UsuariosCadastrados(list):
-    def __init__(self, usuarios):
-        super().__init__(usuarios)
-
 
 def cria_menu():
-    print('\n', '\033[33m*' * 40)
-    print('\n', '\033[33m*' * 6, '\033[34;7mDigite a opção que deseja\033[m', '\033[33m*' * 7)
-    print('\n', '\033[33m*\033[m' * 2, '\033[34m    1 - Adicionar um usuário\033[m      ', '\033[33m*' * 2)
-    print('\n', '\033[33m*\033[m' * 2, '\033[34m2 - Apresenta usuários cadastrados\033[m', '\033[33m*' * 2)
-    print('\n', '\033[33m*\033[m' * 2, '\033[34m       3 - Excluir usuário\033[m        ', '\033[33m*' * 2)
-    print('\n', '\033[33m*\033[m' * 2, '  \033[34m    0 - Sair do programa   \033[m     ', '\033[33m*' * 2)
-    print('\n', '\033[33m*\033[m' * 40)
-    print('\n', '\033[33m*\033[m' * 40, '\n')
+    print(' ')
+    print('\033[33m*' * 6, '\033[34;7mDigite a opção que deseja\033[m', '\033[33m*' * 7)
+    print('\033[33m*\033[m' * 2, '\033[34m    1 - Adicionar um usuário\033[m      ', '\033[33m*' * 2)
+    print('\033[33m*\033[m' * 2, '\033[34m2 - Apresenta usuários cadastrados\033[m', '\033[33m*' * 2)
+    print('\033[33m*\033[m' * 2, '\033[34m       3 - Busca aluno\033[m            ', '\033[33m*' * 2)
+    print('\033[33m*\033[m' * 2, '\033[34m      4 - Excluir aluno\033[m           ', '\033[33m*' * 2)
+    print('\033[33m*\033[m' * 2, '  \033[34m  0 - Sair do programa     \033[m     ', '\033[33m*' * 2)
+    print('\033[33m*\033[m' * 40, '\n')
 
 
 def entrada_do_usuario():
-    choice = ' '
-    i = 0
 
     choice = input('-----> ')
 
+    i = 0
     while i < 3:
         if choice.isnumeric():
             if choice == '0':
-                print('\033[1;35mPrograma desligando2...\033[m')
+                print('\033[1;35mPrograma desligando...\033[m')
                 connection.close()
                 exit()
-            elif int(choice) in range(1, 4):
+            elif int(choice) in range(1, 5):
                 return choice
             else:
                 print('Você precisa digitar umas das opções apresentadas no menu acima.')
@@ -104,7 +50,7 @@ def entrada_do_usuario():
             print(f'Você tem mais {3 - i} chances')
             choice = input('-----> ')
         i += 1
-    print('\033[1;35mPrograma desligando3...\033[m')
+    print('\033[1;35mPrograma desligando...\033[m')
     connection.close()
     exit()
 
@@ -116,27 +62,6 @@ def cria_aluno(id, nome, sobrenome, celular, cep):
     return user
 
 
-def adiciona_aluno(choice):
-    if choice == '1':
-        return True
-    else:
-        return False
-
-
-def mostra_cadastro(choice):
-    if choice == '2':
-        return True
-    else:
-        return False
-
-
-def exclui_usuario(choice):
-    if choice == '3':
-        return True
-    else:
-        return False
-
-
 def guarda_no_bd(usuario):
 
     cursor.execute('''
@@ -145,14 +70,15 @@ def guarda_no_bd(usuario):
             nome TEXT NOT NULL,
             sobrenome TEXT NOT NULL,
             celular TEXT NOT NULL,
-            cep TEXT NOT NULL
+            cep TEXT NOT NULL,
+            endereco TEXT NOT NULL,
+            bairro TEXT NOT NULL
         );
         ''')
 
-    print(usuario.nome)
     cursor.execute(f'''
-        INSERT INTO alunos (id, nome, sobrenome, celular, cep)
-        VALUES ('{usuario.id}', '{usuario.nome}', '{usuario.sobrenome}', '{usuario.celular}', '{usuario.cep}')
+        INSERT INTO alunos (id, nome, sobrenome, celular, cep, endereco, bairro)
+        VALUES ('{usuario.id}', '{usuario.nome}', '{usuario.sobrenome}', '{usuario.celular}', '{usuario.cep}', '{usuario.endereco}', '{usuario.bairro}')
     ''')
 
     connection.commit()
@@ -161,13 +87,23 @@ def guarda_no_bd(usuario):
 def imprime_usuarios_cadastrados():
 
     cursor.execute(f'''
-        SELECT id, nome, sobrenome, celular, cep FROM alunos
+        SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
     ''')
     if cursor.rowcount == 0:
         print('Nenhum aluno encontrado')
     else:
         for aluno in cursor.fetchall():
-            print(aluno)
+            imprime_framework_de_aluno(aluno)
+
+
+def imprime_framework_de_aluno(aluno):
+    print(f'\033[35mNúmero de cadastro Id: {aluno[0]}------\033[m')
+    print(f'Nome do(a) aluno(a): {aluno[1]} {aluno[2]}')
+    print(f'Número do celular: {aluno[3]}')
+    print(f'CEP: {aluno[4]}')
+    print(f'Endereço: {aluno[5]}')
+    print(f'Bairro: {aluno[6]}')
+    print(' ')
 
 
 def usuario_existe(usuario):
@@ -177,87 +113,52 @@ def usuario_existe(usuario):
         WHERE nome = '{usuario}'
     ''')
 
-    print(cursor.rowcount)
-
     if cursor.rowcount != 0:
         return True
     else:
         return False
 
 
-def deleta_usuario():
-    delete = input('Qual usuário deseja excluir? (Nome ou Id): ')
-    data = pd.read_csv('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv')
+def encontra_aluno():
+    busca = input('Qual aluno deseja buscar? (Nome ou Id): ')
 
+    if busca.isnumeric():
+        cursor.execute(f'''
+            SELECT id, nome, sobrenome, celular, cep FROM alunos
+            WHERE id = '{busca}'   
+        ''')
+    else:
+        cursor.execute(f'''
+            SELECT id, nome, sobrenome, celular, cep FROM alunos
+            WHERE nome = '{busca}'   
+        ''')
+    if cursor.rowcount == -1:
+        print('\033[36mO(a) aluno(a) não foi encontrado(a).\033[m')
+    else:
+        for aluno in cursor.fetchall():
+            imprime_framework_de_aluno(aluno)
+
+
+def deleta_usuario():
+
+    delete = input('Qual usuário deseja excluir? (Nome ou Id): ')
 
     if delete.isnumeric():
-        try:
-            delete = int(delete)
-            index = data[data['Id'] == delete].index[0]
-            print('\033[34mProcurando o Id do usuário...\033[m', '\n')
-            print('Usuário encontrado:')
-            print(index)
-            print('\033[32m', data.iloc[index], '\033[m')
-            data = data.drop(index)
-            # print(data.head())
-        except IndexError:
-            print('Usuário não encontrado. Tente novamente.')
+        cursor.execute(f'''
+            DELETE FROM alunos
+            WHERE id = '{delete}'            
+        ''')
+        if cursor.rowcount == -1:
+            print('\033[34mAluno(a) não encontrado(a).\033[m')
     else:
-        try:
-            index = data[data['Usuário'] == delete].index[0]
-            print('\033[34mProcurando o nome do usuário...\033[m')
-            print('Usuário encontrado:')
-            print(index)
-            print('\033[32m', data.iloc[index], '\033[m', '\n')
-            data = data.drop(index)
-            # print(data.head())
-        except IndexError:
-            print('Usuário não encontrado. Tente novamente.')
+        cursor.execute(f'''
+            DELETE FROM alunos
+            WHERE nome = '{delete}'
+        ''')
+        if cursor.rowcount == -1:
+            print('\033[34mAluno(a) não encontrado(a).\033[m')
 
-    atualiza_usuarios(data)
-
-
-def atualiza_usuarios(data):
-    print(data.head())
-    cadastro = []
-    for user in data.itertuples():
-        usuario = Usuario(user[1], user[2], user[3], user[4])
-        cadastro.append(usuario)
-    usuarios = UsuariosCadastrados(cadastro)
-    os.remove('/home/israel/Documentos/Cursos/Arquivos/lista_de_usuarios.csv')
-    reinicia_programa()
-    for user in usuarios:
-        imprime_lista(user)
-
-
-# def reinicia_programa():
-#
-#     cursor.execute('''
-#         CREATE TABLE IF NOT EXISTS alunos (
-#             id TEXT NOT NULL,
-#             nome TEXT NOT NULL,
-#             celular TEXT NOT NULL,
-#             cep TEXT NOT NULL
-#         );
-#     ''')
-#
-#     cursor.execute(f'''
-#         SELECT id, nome, celular, cep FROM alunos
-#     ''')
-#
-#     cadastro = []
-#     print(cursor.rowcount)
-#     if cursor.rowcount == 0:
-#         print('Não há alunos no banco de dados')
-#     else:
-#         for usuario in cursor.fetchall():
-#             usuario = Usuario(usuario[1], usuario[2], usuario[3], usuario[4])
-#             cadastro.append(usuario)
-#         usuarios = UsuariosCadastrados(cadastro)
-#
-#         for usuario in usuarios:
-#             print(usuario)
-#     return usuarios
+    connection.commit()
 
 
 def main():
@@ -268,17 +169,36 @@ def main():
     while True:
 
         if adiciona_aluno(choice):
+
             nome = input('Digite nome do aluno: ')
+            while not certifica_nome(nome):
+                nome = input('Digite nome do aluno: ')
+
             sobrenome = input('Digite sobrenome do aluno: ')
-            numero = input('Digite o telefone/celular do aluno: ')
+            while not certifica_nome(sobrenome):
+                sobrenome = input('Digite sobrenome do aluno: ')
+
+            celular = input('Digite o telefone/celular do aluno: ')
+            while not certifica_celular(celular):
+                celular = input('Digite o telefone/celular do aluno: ')
+
             cep = input('Digite o cep do aluno: ')
-            cria_aluno(randint(1000, 10000), nome, sobrenome, numero, cep)
+            while not certifica_cep(cep):
+                cep = input('Digite o cep do aluno: ')
+
+            cria_aluno(randint(1000, 10000), nome, sobrenome, celular, cep)
 
         elif mostra_cadastro(choice):
             imprime_usuarios_cadastrados()
 
+        elif busca_aluno(choice):
+            encontra_aluno()
+
+        elif exclui_usuario(choice):
+            deleta_usuario()
+
         else:
-            print('\033[1;35mPrograma desligando1...\033[m')
+            print('\033[1;35mPrograma desligando...\033[m')
             connection.close()
             exit()
 
