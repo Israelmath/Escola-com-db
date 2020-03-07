@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 
 def adiciona_aluno(choice):
@@ -55,7 +56,7 @@ def certifica_cep(cep):
 
 
 def mascara_celular(numero):
-    numero_correto = f'({numero[:2]}) {numero[2:6]}-{numero[6:]}'
+    numero_correto = f'({numero[:2]}) {numero[2:7]}-{numero[7:]}'
     return numero_correto
 
 
@@ -65,15 +66,18 @@ def mascara_cep(cep):
 
 
 def confere_endereco(cep):
-    r = requests.get('http://www.viacep.com.br/ws/' + cep + '/json/')
-    endereco = r.json()['logradouro']
-    bairro = r.json()['bairro']
-    print('\033[34m\n', endereco, '\n', bairro, '\n \033[m')
-    confirmacao = input('O endereco está correto? (S/n): ').lower()
+    try:
+        r = requests.get('http://www.viacep.com.br/ws/' + cep + '/json/')
+        endereco = r.json()['logradouro']
+        bairro = r.json()['bairro']
+        print('\033[34m\n', endereco, '\n', bairro, '\n \033[m')
+        confirmacao = input('O endereco está correto? (S/n): ').lower()
 
-    if confirmacao == 's':
-        return True
-    else:
+        if confirmacao == 's':
+            return True
+        else:
+            return False
+    except KeyError:
         return False
 
 
@@ -87,3 +91,23 @@ def busca_bairro(cep):
     r = requests.get('http://www.viacep.com.br/ws/03069000/json/')
     bairro = r.json()['bairro']
     return bairro
+
+
+def verifica_senha(senha):
+    if int(senha) == datetime.today().hour:
+        return True
+    else:
+        return False
+
+
+def verifica_exclusao():
+
+    print('Você realmente deseja excluir o(a) aluno(a)? (S/n)')
+    if input().lower() == 's':
+        senha = input('Digite sua senha: ')
+        if verifica_senha(senha):
+            return True
+        else:
+            return False
+    else:
+        return False

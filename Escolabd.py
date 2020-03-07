@@ -29,7 +29,6 @@ def cria_menu():
 
 
 def entrada_do_usuario():
-
     choice = input('-----> ')
 
     i = 0
@@ -63,7 +62,6 @@ def cria_aluno(id, nome, sobrenome, celular, cep):
 
 
 def guarda_no_bd(usuario):
-
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS alunos (
             id TEXT NOT NULL,
@@ -85,7 +83,6 @@ def guarda_no_bd(usuario):
 
 
 def imprime_usuarios_cadastrados():
-
     cursor.execute(f'''
         SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
     ''')
@@ -99,15 +96,14 @@ def imprime_usuarios_cadastrados():
 def imprime_framework_de_aluno(aluno):
     print(f'\033[35mNúmero de cadastro Id: {aluno[0]}------\033[m')
     print(f'Nome do(a) aluno(a): {aluno[1]} {aluno[2]}')
-    print(f'Número do celular: {aluno[3]}')
-    print(f'CEP: {aluno[4]}')
+    print(f'Número do celular: {mascara_celular(aluno[3])}')
+    print(f'CEP: {mascara_cep(aluno[4])}')
     print(f'Endereço: {aluno[5]}')
     print(f'Bairro: {aluno[6]}')
     print(' ')
 
 
 def usuario_existe(usuario):
-
     cursor.execute(f'''
         SELECT nome FROM alunos
         WHERE nome = '{usuario}'
@@ -119,50 +115,109 @@ def usuario_existe(usuario):
         return False
 
 
-def encontra_aluno():
-    busca = input('Qual aluno deseja buscar? (Nome ou Id): ')
+def busca_por_numero(busca):
+    cursor.execute(f'''
+                SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
+                WHERE id = '{busca}'   
+            ''')
+    encontrados = cursor.fetchall()
+
+    if len(encontrados) == 0:
+        cursor.execute(f'''
+                    SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
+                    WHERE celular = '{busca}'   
+                ''')
+        encontrados = cursor.fetchall()
+
+    if len(encontrados) == 0:
+        cursor.execute(f'''
+                    SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
+                    WHERE cep = '{busca}'   
+                ''')
+        encontrados = cursor.fetchall()
+
+    if len(encontrados) == 0:
+        print('\033[36mO(a) aluno(a) não foi encontrado(a).\033[m')
+        return []
+
+    return encontrados
+
+
+def busca_por_nome(busca):
+    cursor.execute(f'''
+        SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
+        WHERE nome = '{busca}'   
+    ''')
+    encontrados = cursor.fetchall()
+
+    if len(encontrados) == 0:
+        cursor.execute(f'''
+            SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
+            WHERE sobrenome = '{busca}'   
+        ''')
+        encontrados = cursor.fetchall()
+
+    if len(encontrados) == 0:
+        cursor.execute(f'''
+            SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
+            WHERE endereco = '{busca}'   
+        ''')
+        encontrados = cursor.fetchall()
+
+    if len(encontrados) == 0:
+        cursor.execute(f'''
+            SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
+            WHERE bairro = '{busca}'   
+        ''')
+        encontrados = cursor.fetchall()
+
+    if len(encontrados) == 0:
+        print('\033[36mO(a) aluno(a) não foi encontrado(a).\033[m')
+        return []
+
+    return encontrados
+
+
+def encontra_aluno(busca=False):
+    if not busca:
+        busca = input('Qual aluno deseja buscar? (Nome ou Id): ')
 
     if busca.isnumeric():
-        cursor.execute(f'''
-            SELECT id, nome, sobrenome, celular, cep FROM alunos
-            WHERE id = '{busca}'   
-        ''')
+        encontrados = busca_por_numero(busca)
+
     else:
-        cursor.execute(f'''
-            SELECT id, nome, sobrenome, celular, cep FROM alunos
-            WHERE nome = '{busca}'   
-        ''')
-    if cursor.rowcount == -1:
-        print('\033[36mO(a) aluno(a) não foi encontrado(a).\033[m')
-    else:
-        for aluno in cursor.fetchall():
+        encontrados = busca_por_nome(busca)
+
+    if len(encontrados) != 0:
+        for aluno in encontrados:
             imprime_framework_de_aluno(aluno)
 
 
 def deleta_usuario():
-
     delete = input('Qual usuário deseja excluir? (Nome ou Id): ')
+    encontra_aluno(delete)
 
     if delete.isnumeric():
-        cursor.execute(f'''
-            DELETE FROM alunos
-            WHERE id = '{delete}'            
-        ''')
-        if cursor.rowcount == -1:
-            print('\033[34mAluno(a) não encontrado(a).\033[m')
+        if verifica_exclusao():
+            cursor.execute(f'''
+                DELETE FROM alunos
+                WHERE id = '{delete}'            
+            ''')
+            if cursor.rowcount == -1:
+                print('\033[34mAluno(a) não encontrado(a).\033[m')
     else:
-        cursor.execute(f'''
-            DELETE FROM alunos
-            WHERE nome = '{delete}'
-        ''')
-        if cursor.rowcount == -1:
-            print('\033[34mAluno(a) não encontrado(a).\033[m')
+        if verifica_exclusao():
+            cursor.execute(f'''
+                DELETE FROM alunos
+                WHERE nome = '{delete}'
+            ''')
+            if cursor.rowcount == -1:
+                print('\033[34mAluno(a) não encontrado(a).\033[m')
 
     connection.commit()
 
 
 def main():
-
     cria_menu()
     choice = entrada_do_usuario()
 

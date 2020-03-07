@@ -1,4 +1,4 @@
-from Verificadores import mascara_celular, mascara_cep, busca_endereco, busca_bairro
+from Verificadores import busca_endereco, busca_bairro
 
 
 class Usuario:
@@ -7,8 +7,8 @@ class Usuario:
         self.__id = id
         self.__nome = nome.title()
         self.__sobrenome = sobrenome.title()
-        self.__celular = mascara_celular(celular)
-        self.__cep = mascara_cep(cep)
+        self.__celular = celular
+        self.__cep = cep
         self.__endereco = busca_endereco(cep)
         self.__bairro = busca_bairro(cep)
 
