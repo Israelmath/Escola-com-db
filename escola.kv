@@ -1,0 +1,285 @@
+<Gerenciador>:
+    MenuInicial:
+        name: 'Tela inicial'
+    AdicionaAlunoTela:
+        name: 'Adiciona aluno'
+    BuscaAlunoTela:
+        name: 'Busca aluno'
+    ListaAlunosTela:
+        name: 'Lista alunos'
+    ExcluiAlunoTela:
+        name: 'Exclui aluno'
+
+<MenuInicial>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 120
+        spacing: 10 
+        canvas.before:
+            Color:
+                rgba: 0.9,0.9,0.9,0.8
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Image:
+            size_hint_y: None
+            height: 100
+            allow_stretch: True
+            source: 'Images/teacher.png'
+        BotaoInicial:
+            text: 'Adicionar aluno(a)'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+            color: 0,0,0,0.8
+            on_release: app.root.current = 'Adiciona aluno'
+        BotaoInicial:
+            text: 'Buscar aluno(a)'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+            color: 0,0,0,0.8
+            on_release: app.root.current = 'Busca aluno'
+        BotaoInicial:
+            text: 'Lista de alunos'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+            color: 0,0,0,0.8
+            on_release: app.root.current = 'Lista alunos'
+        BotaoInicial:
+            text: 'Excluir aluno(a)'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+            color: 0,0,0,0.8
+            on_release: app.root.current = 'Exclui aluno'
+        BotaoInicial:
+            text: 'Desligar programa'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+            color: 0,0,0,0.8
+            on_release: app.stop()
+
+
+<AdicionaAlunoTela@Screen>:
+    canvas:
+        Color:
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        ActionBar:
+            canvas:
+                Color:
+                    rgba: 0.3,0.7,0.7,0.95
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            ActionView:
+                ActionPrevious:
+                    title: 'Adiciona aluno(a)'
+                    color: 0.1,0.1,0.1
+                    on_release: app.root.current = 'Tela inicial'
+                ActionButton:
+                    text: 'Sair'
+                    color: 0.1,0.1,0.1
+                    on_release: app.stop()
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+            padding: 10
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 40
+                Label:
+                    size_hint_x: None
+                    widht: 160
+                    text: 'Nome:'
+                    color: 0,0,0
+                    font_size: 20
+                    font_name: 'Fonts/UbuntuMono-R'
+                TextInput:
+                    id: Nome
+                    text:
+                    write_tab: False
+                    hint_text: 'Primeiro nome do(a) aluno(a)'
+                    font_size: 18
+                    font_name: 'Fonts/UbuntuMono-R'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 40
+                Label:
+                    size_hint_x: None
+                    widht: 160
+                    text: 'Sobrenome:'
+                    color: 0,0,0
+                    font_size: 20
+                    font_name: 'Fonts/UbuntuMono-R'
+                TextInput:
+                    id: Sobrenome
+                    text:
+                    write_tab: False
+                    hint_text: 'Sobrenome do(a) aluno(a)'
+                    font_size: 18
+                    font_name: 'Fonts/UbuntuMono-R'            
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 40
+                Label:
+                    size_hint_x: None
+                    widht: 160
+                    text: 'Celular:'
+                    color: 0,0,0
+                    font_size: 20
+                    font_name: 'Fonts/UbuntuMono-R'
+                TextInput:
+                    id: 'Celular'
+                    hint_text: '(11)111111111'
+                    font_size: 18
+                    write_tab: False
+                    font_name: 'Fonts/UbuntuMono-R'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 40
+                Label:
+                    size_hint_x: None
+                    widht: 160
+                    text: 'CEP:'
+                    color: 0,0,0
+                    font_size: 20
+                    font_name: 'Fonts/UbuntuMono-R'
+                TextInput:
+                    id: 'CEP'
+                    hint_text: '12345678'
+                    font_size: 18
+                    write_tab: False
+                    font_name: 'Fonts/UbuntuMono-R'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 40
+                Label:
+                    size_hint_x: None
+                    widht: 160
+                    text: 'Endereço:'
+                    color: 0,0,0
+                    font_size: 20
+                    font_name: 'Fonts/UbuntuMono-R'
+                TextInput:
+                    id: 'Endereço'
+                    hint_text: 'Endereço do(a) aluno(a)'
+                    font_size: 18
+                    write_tab: False
+                    font_name: 'Fonts/UbuntuMono-R'
+            BoxLayout:
+                padding: 15
+                Label:
+                    text: ''
+                Button:
+                    background_normal: 'Images/ok.png'
+                    border: 0,0,0,0
+                    size_hint_x: None
+                    size_hint_y: None
+                    heigth: 128
+                    width: 120
+                    on_release: root.defineVariaveis()
+
+
+<ListaAlunosTela@Screen>:
+    BoxLayout:
+        orientation: 'vertical'
+        ActionBar:
+            canvas:
+                Color:
+                    rgba: 0.3,0.7,0.7,0.95
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            ActionView:
+                ActionPrevious:
+                    title: 'Lista aluno(a)'
+                    color: 0.1,0.1,0.1
+                    on_release: app.root.current = 'Tela inicial'
+                ActionButton:
+                    text: 'Sair'
+                    color: 0.1,0.1,0.1
+                    on_release: app.stop()
+        Button:
+            text: 'Lista alunos'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+        Button:
+            text: 'Lista alunos'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+        Button:
+            text: 'Lista alunos'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+
+<ExcluiAlunoTela@Screen>:
+    BoxLayout:
+        orientation: 'vertical'
+        ActionBar:
+            canvas:
+                Color:
+                    rgba: 0.3,0.7,0.7,0.95
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            ActionView:
+                ActionPrevious:
+                    title: 'Excluir aluno(a)'
+                    color: 0.1,0.1,0.1
+                    on_release: app.root.current = 'Tela inicial'
+                ActionButton:
+                    text: 'Sair'
+                    color: 0.1,0.1,0.1
+                    on_release: app.stop()
+        Button:
+            text: 'Excluir aluno(a)'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+
+
+<BuscaAlunoTela@Screen>:
+    BoxLayout:
+        orientation: 'vertical'
+        ActionBar:
+            canvas:
+                Color:
+                    rgba: 0.3,0.7,0.7,0.95
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            ActionView:
+                ActionPrevious:
+                    title: 'Buscar aluno(a)'
+                    color: 0.1,0.1,0.1
+                    on_release: app.root.current = 'Tela inicial'
+                ActionButton:
+                    text: 'Sair'
+                    color: 0.1,0.1,0.1
+                    on_release: app.stop()
+        Button:
+            text: 'Buscar aluno(a)'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+
+
+<BotaoInicial@ButtonBehavior+Label>
+    canvas.before:
+        Color:
+            rgba: 235/235,149/235,50/235,1
+        Ellipse:
+            pos: self.pos
+            size: self.height, self.height
+        Ellipse:
+            pos: self.x+self.width-self.height,self.y
+            size: self.height, self.height
+        Rectangle:
+            pos: self.x+self.height/2.0, self.y
+            size: self.width-self.height,self.height
