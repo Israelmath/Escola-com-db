@@ -260,5 +260,5 @@ def main():
         cria_menu()
         choice = entrada_do_usuario()
 
-
-main()
+if __name__ == "__main__":
+    main()

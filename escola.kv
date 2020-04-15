@@ -135,8 +135,8 @@
                     font_size: 20
                     font_name: 'Fonts/UbuntuMono-R'
                 TextInput:
-                    id: 'Celular'
-                    hint_text: '(11)111111111'
+                    id: Celular
+                    hint_text: 'Sem espaços nem caracteres especiais'
                     font_size: 18
                     write_tab: False
                     font_name: 'Fonts/UbuntuMono-R'
@@ -152,25 +152,8 @@
                     font_size: 20
                     font_name: 'Fonts/UbuntuMono-R'
                 TextInput:
-                    id: 'CEP'
-                    hint_text: '12345678'
-                    font_size: 18
-                    write_tab: False
-                    font_name: 'Fonts/UbuntuMono-R'
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint_y: None
-                height: 40
-                Label:
-                    size_hint_x: None
-                    widht: 160
-                    text: 'Endereço:'
-                    color: 0,0,0
-                    font_size: 20
-                    font_name: 'Fonts/UbuntuMono-R'
-                TextInput:
-                    id: 'Endereço'
-                    hint_text: 'Endereço do(a) aluno(a)'
+                    id: CEP
+                    hint_text: 'Sem espaços nem caracteres especiais'
                     font_size: 18
                     write_tab: False
                     font_name: 'Fonts/UbuntuMono-R'
@@ -188,7 +171,51 @@
                     on_release: root.defineVariaveis()
 
 
+<Aluno>
+    size_hint_y: None
+    height: 30
+    canvas:
+        Color:
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        id: box
+        Label:
+            id: Identificador
+            font_name: 'Fonts/UbuntuMono-R'
+            font_size: 22
+            color: 168/235,39/235,67/235,1
+        Label:
+            id: Nome
+            font_name: 'Fonts/UbuntuMono-R'
+            font_size: 22
+            color: 0,0,0
+        Label:
+            id: Sobrenome
+            font_name: 'Fonts/UbuntuMono-R'
+            font_size: 22
+            color: 0,0,0
+        Label:
+            id: Celular
+            font_name: 'Fonts/UbuntuMono-R'
+            font_size: 22
+            color: 0,0,0
+        Label:
+            id: Cep
+            font_name: 'Fonts/UbuntuMono-R'
+            font_size: 22
+            color: 0,0,0
+
+
 <ListaAlunosTela@Screen>:
+    canvas.before:
+        Color:
+            rgba: 192/235,210/235,62/235,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
     BoxLayout:
         orientation: 'vertical'
         ActionBar:
@@ -207,18 +234,45 @@
                     text: 'Sair'
                     color: 0.1,0.1,0.1
                     on_release: app.stop()
-        Button:
-            text: 'Lista alunos'
-            font_size: 30
-            font_name: 'Fonts/UbuntuMono-R'
-        Button:
-            text: 'Lista alunos'
-            font_size: 30
-            font_name: 'Fonts/UbuntuMono-R'
-        Button:
-            text: 'Lista alunos'
-            font_size: 30
-            font_name: 'Fonts/UbuntuMono-R'
+        ScrollView:
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: 35
+                    Label:
+                        text: 'Id'
+                        font_size: 30
+                        font_name: 'Fonts/UbuntuMono-R'
+                        color: 0,0,0
+                    Label:
+                        text: 'Nome'
+                        font_size: 30
+                        color: 0,0,0
+                        font_name: 'Fonts/UbuntuMono-R'
+                    Label:
+                        text: 'Sobrenome'
+                        font_size: 30
+                        color: 0,0,0
+                        font_name: 'Fonts/UbuntuMono-R'
+                    Label:
+                        text: 'Celular'
+                        font_size: 30
+                        color: 0,0,0
+                        font_name: 'Fonts/UbuntuMono-R'
+                    Label:
+                        text: 'CEP'
+                        font_size: 30
+                        color: 0,0,0
+                        font_name: 'Fonts/UbuntuMono-R'
+                BoxLayout:
+                    spacing: 1
+                    id: bigbox
+                    orientation: 'vertical'
+                    size_hint_y: None 
+                    height: self.minimum_height
+                BoxLayout:
 
 <ExcluiAlunoTela@Screen>:
     BoxLayout:
