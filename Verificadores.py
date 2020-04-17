@@ -1,6 +1,10 @@
 import requests
 from datetime import datetime
-
+from kivy.uix.popup import Popup
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.image import Image
+from kivy.uix.screenmanager import Screen
 
 def adiciona_aluno(choice):
     if choice == '1':
@@ -48,11 +52,16 @@ def certifica_celular(numero):
 
 def certifica_cep(cep):
 
-    if len(cep) == 8 and confere_endereco(cep):
-        return True
+    if len(cep) == 8:
+        resposta, endereco, bairro = confere_endereco(cep)
+        if resposta:
+            return endereco, bairro
+        else:
+            # print('\033[36mCEP incorreto.\033[m')
+            return 'Cep incorreto', 'Cep incorreto' 
     else:
-        print('\033[36mCEP incorreto.\033[m')
-        return False
+        # print('\033[36mCEP incorreto.\033[m')
+        return 'Cep incorreto', 'Cep incorreto'
 
 
 def mascara_celular(numero):
@@ -64,22 +73,14 @@ def mascara_cep(cep):
     cep_correto = f'{cep[:5]}-{cep[5:]}'
     return cep_correto
 
-
 def confere_endereco(cep):
     try:
         r = requests.get('http://www.viacep.com.br/ws/' + cep + '/json/')
         endereco = r.json()['logradouro']
         bairro = r.json()['bairro']
-        print('\033[34m\n', endereco, '\n', bairro, '\n \033[m')
-        confirmacao = input('O endereco está correto? (S/n): ').lower()
-
-        if confirmacao == 's':
-            return True
-        else:
-            return False
+        return (True, endereco, bairro)        
     except KeyError:
-        return False
-
+        return (False, endereco, bairro)
 
 def busca_endereco(cep):
     r = requests.get('http://www.viacep.com.br/ws/03069000/json/')
@@ -111,3 +112,6 @@ def verifica_exclusao():
             return False
     else:
         return False
+
+if __name__ == "__main__":
+    pass

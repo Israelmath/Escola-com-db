@@ -55,11 +55,11 @@
             font_size: 30
             font_name: 'Fonts/UbuntuMono-R'
             color: 0,0,0,0.8
-            on_release: app.stop()
+            on_release: root.confirmacao()
 
 
 <AdicionaAlunoTela@Screen>:
-    canvas:
+    canvas.before:
         Color:
             rgba: 1,1,1,1
         Rectangle:
@@ -70,7 +70,7 @@
         ActionBar:
             canvas:
                 Color:
-                    rgba: 0.3,0.7,0.7,0.95
+                    rgba: 250/235,105/235,50/235,1
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -82,12 +82,13 @@
                 ActionButton:
                     text: 'Sair'
                     color: 0.1,0.1,0.1
-                    on_release: app.stop()
+                    on_release: app.root.Sair()
         BoxLayout:
             orientation: 'vertical'
-            spacing: 10
-            padding: 10
+            spacing: 20
+            padding: 20
             BoxLayout:
+                spacing: 10
                 orientation: 'horizontal'
                 size_hint_y: None
                 height: 40
@@ -95,12 +96,13 @@
                     size_hint_x: None
                     widht: 160
                     text: 'Nome:'
-                    color: 0,0,0
-                    font_size: 20
+                    color: 0.1,0.1,0.1
+                    font_size: 23
                     font_name: 'Fonts/UbuntuMono-R'
                 TextInput:
                     id: Nome
-                    text:
+                    size_hint_x: None
+                    width: 450
                     write_tab: False
                     hint_text: 'Primeiro nome do(a) aluno(a)'
                     font_size: 18
@@ -109,16 +111,18 @@
                 orientation: 'horizontal'
                 size_hint_y: None
                 height: 40
+                spacing: 10
                 Label:
                     size_hint_x: None
                     widht: 160
                     text: 'Sobrenome:'
-                    color: 0,0,0
+                    color: 0.1,0.1,0.1
                     font_size: 20
                     font_name: 'Fonts/UbuntuMono-R'
                 TextInput:
                     id: Sobrenome
-                    text:
+                    size_hint_x: None
+                    width: 450
                     write_tab: False
                     hint_text: 'Sobrenome do(a) aluno(a)'
                     font_size: 18
@@ -127,15 +131,18 @@
                 orientation: 'horizontal'
                 size_hint_y: None
                 height: 40
+                spacing: 10
                 Label:
                     size_hint_x: None
                     widht: 160
                     text: 'Celular:'
-                    color: 0,0,0
-                    font_size: 20
+                    color: 0.1,0.1,0.1
+                    font_size: 23
                     font_name: 'Fonts/UbuntuMono-R'
                 TextInput:
                     id: Celular
+                    size_hint_x: None
+                    width: 450
                     hint_text: 'Sem espaços nem caracteres especiais'
                     font_size: 18
                     write_tab: False
@@ -144,75 +151,86 @@
                 orientation: 'horizontal'
                 size_hint_y: None
                 height: 40
+                spacing: 10
                 Label:
                     size_hint_x: None
                     widht: 160
                     text: 'CEP:'
-                    color: 0,0,0
-                    font_size: 20
+                    color: 0.1,0.1,0.1
+                    font_size: 23
                     font_name: 'Fonts/UbuntuMono-R'
                 TextInput:
                     id: CEP
+                    size_hint_x: None
+                    width: 450
                     hint_text: 'Sem espaços nem caracteres especiais'
                     font_size: 18
                     write_tab: False
                     font_name: 'Fonts/UbuntuMono-R'
+                Button:
+                    background_normal: 'Images/location.png'
+                    border: 0,0,0,0
+                    size_hint: None, None
+                    size: 40,48
+                    on_release: root.VerificaCep()
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 40
+                spacing: 10
+                Label:
+                    size_hint_x: None
+                    widht: 160
+                    text: 'Logradouro:'
+                    color: 0.1,0.1,0.1
+                    font_size: 15
+                    font_name: 'Fonts/UbuntuMono-R'
+                Label:
+                    id: Rua
+                    size_hint_x: None
+                    width: 450
+                    hint_text: 'Sem espaços nem caracteres especiais'
+                    font_size: 18
+                    color: 0,0,0
+                    write_tab: False
+                    font_name: 'Fonts/UbuntuMono-R'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 40
+                spacing: 10
+                Label:
+                    size_hint_x: None
+                    widht: 160
+                    text: 'Bairro:'
+                    color: 0.1,0.1,0.1
+                    font_size: 15
+                    font_name: 'Fonts/UbuntuMono-R'
+                Label:
+                    id: Bairro
+                    size_hint_x: None
+                    width: 450
+                    hint_text: 'Sem espaços nem caracteres especiais'
+                    font_size: 18
+                    color: 0,0,0
+                    write_tab: False
+                    font_name: 'Fonts/UbuntuMono-R'
             BoxLayout:
                 padding: 15
-                Label:
-                    text: ''
+                BoxLayout:
                 Button:
-                    background_normal: 'Images/ok.png'
+                    background_normal: 'Images/folder.png'
                     border: 0,0,0,0
-                    size_hint_x: None
-                    size_hint_y: None
-                    heigth: 128
-                    width: 120
+                    size_hint: None, None
+                    heigth: 88
+                    width: 100
                     on_release: root.defineVariaveis()
-
-
-<Aluno>
-    size_hint_y: None
-    height: 30
-    canvas:
-        Color:
-            rgba: 1,1,1,1
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    BoxLayout:
-        id: box
-        Label:
-            id: Identificador
-            font_name: 'Fonts/UbuntuMono-R'
-            font_size: 22
-            color: 168/235,39/235,67/235,1
-        Label:
-            id: Nome
-            font_name: 'Fonts/UbuntuMono-R'
-            font_size: 22
-            color: 0,0,0
-        Label:
-            id: Sobrenome
-            font_name: 'Fonts/UbuntuMono-R'
-            font_size: 22
-            color: 0,0,0
-        Label:
-            id: Celular
-            font_name: 'Fonts/UbuntuMono-R'
-            font_size: 22
-            color: 0,0,0
-        Label:
-            id: Cep
-            font_name: 'Fonts/UbuntuMono-R'
-            font_size: 22
-            color: 0,0,0
 
 
 <ListaAlunosTela@Screen>:
     canvas.before:
         Color:
-            rgba: 192/235,210/235,62/235,1
+            rgba: 243/235,154/235,108/235,1
         Rectangle:
             pos: self.pos
             size: self.size
@@ -221,7 +239,7 @@
         ActionBar:
             canvas:
                 Color:
-                    rgba: 0.3,0.7,0.7,0.95
+                    rgba: 250/235,105/235,50/235,1
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -233,46 +251,15 @@
                 ActionButton:
                     text: 'Sair'
                     color: 0.1,0.1,0.1
-                    on_release: app.stop()
+                    on_release: app.root.Sair()
         ScrollView:
             BoxLayout:
                 orientation: 'vertical'
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint_y: None
-                    height: 35
-                    Label:
-                        text: 'Id'
-                        font_size: 30
-                        font_name: 'Fonts/UbuntuMono-R'
-                        color: 0,0,0
-                    Label:
-                        text: 'Nome'
-                        font_size: 30
-                        color: 0,0,0
-                        font_name: 'Fonts/UbuntuMono-R'
-                    Label:
-                        text: 'Sobrenome'
-                        font_size: 30
-                        color: 0,0,0
-                        font_name: 'Fonts/UbuntuMono-R'
-                    Label:
-                        text: 'Celular'
-                        font_size: 30
-                        color: 0,0,0
-                        font_name: 'Fonts/UbuntuMono-R'
-                    Label:
-                        text: 'CEP'
-                        font_size: 30
-                        color: 0,0,0
-                        font_name: 'Fonts/UbuntuMono-R'
-                BoxLayout:
-                    spacing: 1
-                    id: bigbox
-                    orientation: 'vertical'
-                    size_hint_y: None 
-                    height: self.minimum_height
-                BoxLayout:
+                spacing: 1
+                id: bigbox
+                size_hint_y: None 
+                height: self.minimum_height
+                
 
 <ExcluiAlunoTela@Screen>:
     BoxLayout:
@@ -292,11 +279,27 @@
                 ActionButton:
                     text: 'Sair'
                     color: 0.1,0.1,0.1
-                    on_release: app.stop()
-        Button:
-            text: 'Excluir aluno(a)'
-            font_size: 30
-            font_name: 'Fonts/UbuntuMono-R'
+                    on_release: app.root.Sair()
+        BoxLayout:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Rectangle:
+                    pos: self.pos
+                    size: self.width/2, self.height
+            Label:
+                id: label
+                color: 0,0,0,1
+                font_size: 30
+                text: 'Qual aluno deseja excluir?'
+                font_name: 'Fonts/UbuntuMono-R'
+            BoxLayout:
+                orientation: 'vertical'
+                TextInput:
+                    size_hint_y: None
+                    height: 30
+                    hint_text: 'Nome, Id, Endereço ou celular'
+                BoxLayout:
 
 
 <BuscaAlunoTela@Screen>:
@@ -317,12 +320,44 @@
                 ActionButton:
                     text: 'Sair'
                     color: 0.1,0.1,0.1
-                    on_release: app.stop()
-        Button:
-            text: 'Buscar aluno(a)'
-            font_size: 30
-            font_name: 'Fonts/UbuntuMono-R'
-
+                    on_release: app.root.Sair()
+        BoxLayout:
+            spacing: 3
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Rectangle:
+                    pos: self.pos
+                    size: self.width/2, self.height
+            Label:
+                id: label
+                color: 0,0,0,1
+                font_size: 30
+                text: 'Qual aluno deseja buscar?'
+                font_name: 'Fonts/UbuntuMono-R'
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: 30
+                    TextInput:
+                        id: Aluno
+                        size_hint_y: None
+                        height: 30
+                        hint_text: 'Nome, Id, Endereço ou celular'
+                    Button:
+                        size_hint_x: None
+                        size_hint_y: None
+                        size: 30,30
+                        text: 'Ok'
+                        on_release: root.busca()
+                ScrollView:
+                    BoxLayout:
+                        orientation: 'vertical'
+                        id: bigbox
+                        size_hint_y: None 
+                        height: self.minimum_height          
 
 <BotaoInicial@ButtonBehavior+Label>
     canvas.before:
@@ -337,3 +372,54 @@
         Rectangle:
             pos: self.x+self.height/2.0, self.y
             size: self.width-self.height,self.height
+
+
+<Aluno>
+    size_hint_y: None
+    height: 100
+    canvas:
+        Color:
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        id: box
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_x: None
+            width: 60
+            Label:
+                id: Identificador
+                font_name: 'Fonts/UbuntuMono-R'
+                font_size: 22
+                color: 0,0,0
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                id: Nome
+                font_name: 'Fonts/UbuntuMono-R'
+                font_size: 30
+                color: 0,0,0
+            Label:
+                id: Sobrenome
+                font_name: 'Fonts/UbuntuMono-R'
+                font_size: 30
+                color: 0,0,0
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_x: None
+            width: 275
+            Label:
+                id: Celular
+                halign: 'left'
+                font_name: 'Fonts/UbuntuMono-R'
+                font_size: 18
+                color: 0,0,0
+            Label:
+                id: Cep
+                font_name: 'Fonts/UbuntuMono-R'
+                font_size: 18
+                color: 0,0,0
+    BoxLayout:

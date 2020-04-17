@@ -178,19 +178,27 @@ def busca_por_nome(busca):
     return encontrados
 
 
-def encontra_aluno(busca=False):
+def encontra_aluno(busca=False, from_layout = False):
     if not busca:
-        busca = input('Qual aluno deseja buscar? (Nome ou Id): ')
+        if not from_layout:
+            busca = input('Qual aluno deseja buscar? (Nome ou Id): ')
 
     if busca.isnumeric():
-        encontrados = busca_por_numero(busca)
-
+        if not from_layout:
+            encontrados = busca_por_numero(busca)
+        else:
+            return busca_por_numero(busca)
     else:
-        encontrados = busca_por_nome(busca)
+        if not from_layout:
+            encontrados = busca_por_nome(busca)
+        else:
+            return busca_por_nome(busca)
 
-    if len(encontrados) != 0:
-        for aluno in encontrados:
-            imprime_framework_de_aluno(aluno)
+    if not from_layout:
+        if len(encontrados) != 0:
+            for aluno in encontrados:
+                imprime_framework_de_aluno(aluno)
+        
 
 
 def deleta_usuario():
