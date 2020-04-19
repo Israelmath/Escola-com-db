@@ -201,9 +201,13 @@ def encontra_aluno(busca=False, from_layout = False):
         
 
 
-def deleta_usuario():
-    delete = input('Qual usuário deseja excluir? (Nome ou Id): ')
-    encontra_aluno(delete)
+def deleta_usuario(delete = False, from_layout = False):
+    if not from_layout:
+        if not delete:
+            delete = input('Qual usuário deseja excluir? (Nome ou Id): ')
+            encontra_aluno(delete)
+        else:
+            encontra_aluno(delete, True)
 
     if delete.isnumeric():
         if verifica_exclusao():

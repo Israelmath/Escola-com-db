@@ -17,7 +17,7 @@
         spacing: 10 
         canvas.before:
             Color:
-                rgba: 0.9,0.9,0.9,0.8
+                rgba: 1,1,1,1
             Rectangle:
                 pos: self.pos
                 size: self.size
@@ -70,7 +70,7 @@
         ActionBar:
             canvas:
                 Color:
-                    rgba: 250/235,105/235,50/235,1
+                    rgba: 74/245, 188/245, 150/245,1
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -168,10 +168,10 @@
                     write_tab: False
                     font_name: 'Fonts/UbuntuMono-R'
                 Button:
-                    background_normal: 'Images/location.png'
+                    background_normal: 'Images/map.png'
                     border: 0,0,0,0
                     size_hint: None, None
-                    size: 40,48
+                    size: 45,45
                     on_release: root.VerificaCep()
             BoxLayout:
                 orientation: 'horizontal'
@@ -239,7 +239,7 @@
         ActionBar:
             canvas:
                 Color:
-                    rgba: 250/235,105/235,50/235,1
+                    rgba: 74/245, 188/245, 150/245,1
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -261,54 +261,20 @@
                 height: self.minimum_height
                 
 
-<ExcluiAlunoTela@Screen>:
-    BoxLayout:
-        orientation: 'vertical'
-        ActionBar:
-            canvas:
-                Color:
-                    rgba: 0.3,0.7,0.7,0.95
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-            ActionView:
-                ActionPrevious:
-                    title: 'Excluir aluno(a)'
-                    color: 0.1,0.1,0.1
-                    on_release: app.root.current = 'Tela inicial'
-                ActionButton:
-                    text: 'Sair'
-                    color: 0.1,0.1,0.1
-                    on_release: app.root.Sair()
-        BoxLayout:
-            canvas.before:
-                Color:
-                    rgba: 1,1,1,1
-                Rectangle:
-                    pos: self.pos
-                    size: self.width/2, self.height
-            Label:
-                id: label
-                color: 0,0,0,1
-                font_size: 30
-                text: 'Qual aluno deseja excluir?'
-                font_name: 'Fonts/UbuntuMono-R'
-            BoxLayout:
-                orientation: 'vertical'
-                TextInput:
-                    size_hint_y: None
-                    height: 30
-                    hint_text: 'Nome, Id, Endereço ou celular'
-                BoxLayout:
-
-
 <BuscaAlunoTela@Screen>:
     BoxLayout:
+        spacing:7
         orientation: 'vertical'
+        canvas:
+            Color:
+                rgb: 224/255,228/255,204/255
+            Rectangle:
+                pos: self.pos
+                size: self.size
         ActionBar:
             canvas:
                 Color:
-                    rgba: 0.3,0.7,0.7,0.95
+                    rgb: 243/255,134/255,48/255
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -322,42 +288,111 @@
                     color: 0.1,0.1,0.1
                     on_release: app.root.Sair()
         BoxLayout:
-            spacing: 3
-            canvas.before:
-                Color:
-                    rgba: 1,1,1,1
-                Rectangle:
-                    pos: self.pos
-                    size: self.width/2, self.height
-            Label:
-                id: label
-                color: 0,0,0,1
-                font_size: 30
-                text: 'Qual aluno deseja buscar?'
-                font_name: 'Fonts/UbuntuMono-R'
+            orientation: 'vertical'
             BoxLayout:
                 orientation: 'vertical'
-                BoxLayout:
-                    orientation: 'horizontal'
+                spacing: 20
+                BgTexto:
+                    text: 'Qual aluno deseja buscar?'
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 29
                     size_hint_y: None
-                    height: 30
+                    size_hint_x: None
+                    width: 450
+                    height: 60
+                    pos_hint: {'top': 1}
+                BoxLayout:
+                    spacing: 5
+                    size_hint_x: None
+                    size_hint_y: None
+                    width: 350
+                    size_hint: 0.5,0.1
                     TextInput:
                         id: Aluno
-                        size_hint_y: None
-                        height: 30
-                        hint_text: 'Nome, Id, Endereço ou celular'
+                        hint_text:  'Digite qualquer informação do(a) aluno(a)'
+                        multiline: False
                     Button:
-                        size_hint_x: None
-                        size_hint_y: None
-                        size: 30,30
-                        text: 'Ok'
+                        background_normal: 'Images/procurar.png'
+                        border: 0,0,0,0
+                        size_hint: None, None
+                        width: 39
+                        height: 39
                         on_release: root.busca()
-                ScrollView:
-                    BoxLayout:
-                        orientation: 'vertical'
-                        id: bigbox
-                        size_hint_y: None 
-                        height: self.minimum_height          
+                BoxLayout:
+                    ScrollView:
+                        BoxLayout:
+                            orientation: 'vertical'
+                            spacing: 1
+                            id: bigbox
+                            size_hint_y: None 
+                            height: self.minimum_height
+
+                    
+<ExcluiAlunoTela@Screen>:
+    BoxLayout:
+        spacing:7
+        orientation: 'vertical'
+        canvas:
+            Color:
+                rgb: 224/255,228/255,204/255
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        ActionBar:
+            canvas:
+                Color:
+                    rgb: 243/255,134/255,48/255
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            ActionView:
+                ActionPrevious:
+                    title: 'Buscar aluno(a)'
+                    color: 0.1,0.1,0.1
+                    on_release: app.root.current = 'Tela inicial'
+                ActionButton:
+                    text: 'Sair'
+                    color: 0.1,0.1,0.1
+                    on_release: app.root.Sair()
+        BoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 20
+                BgTexto:
+                    text: 'Qual aluno deseja buscar?'
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 29
+                    size_hint_y: None
+                    size_hint_x: None
+                    width: 450
+                    height: 60
+                    pos_hint: {'top': 1}
+                BoxLayout:
+                    spacing: 5
+                    size_hint_x: None
+                    size_hint_y: None
+                    width: 350
+                    size_hint: 0.5,0.1
+                    TextInput:
+                        id: Aluno
+                        hint_text:  'Digite qualquer informação do(a) aluno(a)'
+                        multiline: False
+                    Button:
+                        background_normal: 'Images/procurar.png'
+                        border: 0,0,0,0
+                        size_hint: None, None
+                        width: 39
+                        height: 39
+                        on_release: root.busca()
+                BoxLayout:
+                    ScrollView:
+                        BoxLayout:
+                            orientation: 'vertical'
+                            spacing: 1
+                            id: bigbox
+                            size_hint_y: None 
+                            height: self.minimum_height   
 
 <BotaoInicial@ButtonBehavior+Label>
     canvas.before:
@@ -397,6 +432,7 @@
                 color: 0,0,0
         BoxLayout:
             orientation: 'horizontal'
+            size_hint: 0.5,1
             Label:
                 id: Nome
                 font_name: 'Fonts/UbuntuMono-R'
@@ -423,3 +459,30 @@
                 font_size: 18
                 color: 0,0,0
     BoxLayout:
+        orientation: 'vertical'
+        size_hint: 0.5,1
+        Button:
+            text: 'Nome'
+            on_release: root.teste()
+        Button:
+            text: 'Sobrenome'
+            on_release: root.teste1()
+
+
+
+<BgTexto@Label>
+    canvas.before:
+        Color:
+            rgb: 250/255,105/255,0
+        Ellipse:
+            pos: self.x+self.width-40, self.y+self.height-40
+            size: 40,40
+        Ellipse:
+            pos: self.x+self.width-40, self.y
+            size: 40,40
+        Rectangle:
+            pos: self.x, self.y
+            size: self.width-20, self.height
+        Rectangle:
+            pos: self.x+self.width-40, self.y+20
+            size: 40,self.height-40

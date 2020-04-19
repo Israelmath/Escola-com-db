@@ -84,6 +84,9 @@ class ListaAlunosTela(Screen):
                                                 )
                                             )
 
+    def on_leave(self, *args):
+        self.ids.bigbox.clear_widgets()
+
 
 class Aluno(BoxLayout):
     def __init__(self, id, nome, sobrenome, celular, cep, **kwargs):
@@ -93,6 +96,12 @@ class Aluno(BoxLayout):
         self.ids.Sobrenome.text = sobrenome
         self.ids.Celular.text = celular
         self.ids.Cep.text = cep
+
+    def teste(self):
+        print(self.ids.Nome.text)
+
+    def teste1(self):
+        print(self.ids.Sobrenome.text)
 
 class AdicionaAlunoTela(Screen):
 
@@ -134,12 +143,6 @@ class AdicionaAlunoTela(Screen):
         endereco = self.ids.Rua.text
         bairro = self.ids.Bairro.text
 
-        print(f'Nome: {nome}')
-        print(f'Sobrenome: {sobrenome}')
-        print(f'Celular: {celular}')
-        print(f'Cep: {cep}')
-        print(f'Endereço: {endereco}')
-        print(f'Bairro: {bairro}')
         
         if erro == 0:
             Escolabd.cria_aluno(randint(1000, 10000), nome, sobrenome, celular, cep)
@@ -158,6 +161,33 @@ class BuscaAlunoTela(Screen):
                             cep = mascara_cep(aluno[4])
                             )
             self.ids.bigbox.add_widget(elemento)
+        self.ids.Aluno.text = ''
+
+
+    def on_leave(self, *args):
+        self.ids.bigbox.clear_widgets()
+        self.ids.Aluno.text = ''
+
+
+class ExcluiAlunoTela(Screen):
+    
+    def busca(self):
+        aluno = self.ids.Aluno.text
+        encontrados = Escolabd.encontra_aluno(aluno, from_layout = True)
+        for aluno in encontrados:
+            elemento = Aluno(id = aluno[0],
+                            nome = aluno[1],
+                            sobrenome = aluno[2],
+                            celular = mascara_celular(aluno[3]),
+                            cep = mascara_cep(aluno[4])
+                            )
+            self.ids.bigbox.add_widget(elemento)
+
+   
+    def on_leave(self, *args):
+        self.ids.bigbox.clear_widgets()
+        self.ids.Aluno.text = ''
+
 
 class Escola(App):
     def build(self):
