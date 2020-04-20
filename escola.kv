@@ -7,8 +7,6 @@
         name: 'Busca aluno'
     ListaAlunosTela:
         name: 'Lista alunos'
-    ExcluiAlunoTela:
-        name: 'Exclui aluno'
 
 <MenuInicial>:
     BoxLayout:
@@ -31,31 +29,37 @@
             font_size: 30
             font_name: 'Fonts/UbuntuMono-R'
             color: 0,0,0,0.8
-            on_release: app.root.current = 'Adiciona aluno'
+            on_release:
+                root.manager.transition.direction = 'left' 
+                app.root.current = 'Adiciona aluno'
         BotaoInicial:
             text: 'Buscar aluno(a)'
             font_size: 30
             font_name: 'Fonts/UbuntuMono-R'
             color: 0,0,0,0.8
-            on_release: app.root.current = 'Busca aluno'
+            on_release:
+                root.manager.transition.direction = 'down' 
+                app.root.current = 'Busca aluno'
         BotaoInicial:
             text: 'Lista de alunos'
             font_size: 30
             font_name: 'Fonts/UbuntuMono-R'
             color: 0,0,0,0.8
-            on_release: app.root.current = 'Lista alunos'
+            on_release:
+                root.manager.transition.direction = 'up' 
+                app.root.current = 'Lista alunos'
         BotaoInicial:
-            text: 'Excluir aluno(a)'
-            font_size: 30
-            font_name: 'Fonts/UbuntuMono-R'
-            color: 0,0,0,0.8
-            on_release: app.root.current = 'Exclui aluno'
-        BotaoInicial:
-            text: 'Desligar programa'
+            text: 'Sair'
             font_size: 30
             font_name: 'Fonts/UbuntuMono-R'
             color: 0,0,0,0.8
             on_release: root.confirmacao()
+        BotaoInicial:
+            text: 'Testando Popup'
+            font_size: 30
+            font_name: 'Fonts/UbuntuMono-R'
+            color: 0,0,0,0.8
+            on_release: app.SemInformacao()
 
 
 <AdicionaAlunoTela@Screen>:
@@ -101,6 +105,8 @@
                     font_name: 'Fonts/UbuntuMono-R'
                 TextInput:
                     id: Nome
+                    background_color: 1,0,0,1
+                    multiline: False
                     size_hint_x: None
                     width: 450
                     write_tab: False
@@ -235,6 +241,7 @@
             pos: self.pos
             size: self.size
     BoxLayout:
+        spacing: 1
         orientation: 'vertical'
         ActionBar:
             canvas:
@@ -328,72 +335,6 @@
                             height: self.minimum_height
 
                     
-<ExcluiAlunoTela@Screen>:
-    BoxLayout:
-        spacing:7
-        orientation: 'vertical'
-        canvas:
-            Color:
-                rgb: 224/255,228/255,204/255
-            Rectangle:
-                pos: self.pos
-                size: self.size
-        ActionBar:
-            canvas:
-                Color:
-                    rgb: 243/255,134/255,48/255
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-            ActionView:
-                ActionPrevious:
-                    title: 'Buscar aluno(a)'
-                    color: 0.1,0.1,0.1
-                    on_release: app.root.current = 'Tela inicial'
-                ActionButton:
-                    text: 'Sair'
-                    color: 0.1,0.1,0.1
-                    on_release: app.root.Sair()
-        BoxLayout:
-            orientation: 'vertical'
-            BoxLayout:
-                orientation: 'vertical'
-                spacing: 20
-                BgTexto:
-                    text: 'Qual aluno deseja buscar?'
-                    font_name: 'Fonts/UbuntuMono-R'
-                    font_size: 29
-                    size_hint_y: None
-                    size_hint_x: None
-                    width: 450
-                    height: 60
-                    pos_hint: {'top': 1}
-                BoxLayout:
-                    spacing: 5
-                    size_hint_x: None
-                    size_hint_y: None
-                    width: 350
-                    size_hint: 0.5,0.1
-                    TextInput:
-                        id: Aluno
-                        hint_text:  'Digite qualquer informação do(a) aluno(a)'
-                        multiline: False
-                    Button:
-                        background_normal: 'Images/procurar.png'
-                        border: 0,0,0,0
-                        size_hint: None, None
-                        width: 39
-                        height: 39
-                        on_release: root.busca()
-                BoxLayout:
-                    ScrollView:
-                        BoxLayout:
-                            orientation: 'vertical'
-                            spacing: 1
-                            id: bigbox
-                            size_hint_y: None 
-                            height: self.minimum_height   
-
 <BotaoInicial@ButtonBehavior+Label>
     canvas.before:
         Color:
@@ -410,63 +351,69 @@
 
 
 <Aluno>
-    size_hint_y: None
-    height: 100
-    canvas:
+    canvas.before:
         Color:
             rgba: 1,1,1,1
         Rectangle:
-            pos: self.pos
-            size: self.size
+            pos: self.x, self.y
+            size: self.width-self.height/2, self.height
+        Ellipse:
+            pos: self.x+self.width-self.height, self.y
+            size: self.height, self.height
+    size_hint_y: None
+    size_hint_x: None
+    height: 100
+    width: 500
     BoxLayout:
-        id: box
-        orientation: 'vertical'
         BoxLayout:
-            orientation: 'horizontal'
-            size_hint_x: None
-            width: 60
-            Label:
-                id: Identificador
-                font_name: 'Fonts/UbuntuMono-R'
-                font_size: 22
-                color: 0,0,0
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 0.5,1
-            Label:
-                id: Nome
-                font_name: 'Fonts/UbuntuMono-R'
-                font_size: 30
-                color: 0,0,0
-            Label:
-                id: Sobrenome
-                font_name: 'Fonts/UbuntuMono-R'
-                font_size: 30
-                color: 0,0,0
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_x: None
-            width: 275
-            Label:
-                id: Celular
-                halign: 'left'
-                font_name: 'Fonts/UbuntuMono-R'
-                font_size: 18
-                color: 0,0,0
-            Label:
-                id: Cep
-                font_name: 'Fonts/UbuntuMono-R'
-                font_size: 18
-                color: 0,0,0
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint: 0.5,1
-        Button:
-            text: 'Nome'
-            on_release: root.teste()
-        Button:
-            text: 'Sobrenome'
-            on_release: root.teste1()
+            id: box
+            orientation: 'vertical'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_x: None
+                width: 60
+                Label:
+                    id: Identificador
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 22
+                    color: 0,0,0
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1,1
+                Label:
+                    id: Nome
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 30
+                    color: 0,0,0
+                Label:
+                    id: Sobrenome
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 30
+                    color: 0,0,0
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_x: None
+                width: 275
+                Label:
+                    id: Celular
+                    halign: 'left'
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 18
+                    color: 0,0,0
+                Label:
+                    id: Cep
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 18
+                    color: 0,0,0
+        AnchorLayout:
+            anchor_x: 'center'
+            Button:
+                background_normal: 'Images/excluir.png'
+                size_hint: None, None
+                width: 30
+                height: 30
+                border: 0,0,0,0
+                on_release: root.ExcluiDados()
 
 
 

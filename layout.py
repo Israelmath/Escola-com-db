@@ -60,6 +60,9 @@ class MenuInicial(Screen):
         if key == 27:
             App.get_running_app().root.current = 'Tela inicial'
             return True
+        
+    def Nada(*args, **kwargs):
+        SemInformacao()
 
 
 
@@ -97,11 +100,10 @@ class Aluno(BoxLayout):
         self.ids.Celular.text = celular
         self.ids.Cep.text = cep
 
-    def teste(self):
-        print(self.ids.Nome.text)
-
-    def teste1(self):
-        print(self.ids.Sobrenome.text)
+    def ExcluiDados(self):
+        Escolabd.deleta_usuario(self.ids.Nome.text, from_layout= True)
+        self.clear_widgets()
+        self.canvas.before.clear()
 
 class AdicionaAlunoTela(Screen):
 
@@ -153,37 +155,20 @@ class BuscaAlunoTela(Screen):
     def busca(self):
         aluno = self.ids.Aluno.text
         encontrados = Escolabd.encontra_aluno(aluno, from_layout = True)
-        for aluno in encontrados:
-            elemento = Aluno(id = aluno[0],
-                            nome = aluno[1],
-                            sobrenome = aluno[2],
-                            celular = mascara_celular(aluno[3]),
-                            cep = mascara_cep(aluno[4])
-                            )
-            self.ids.bigbox.add_widget(elemento)
+        if len(encontrados) == 0:
+            AlunoNaoEncontrado()
+        else:
+            for aluno in encontrados:
+                elemento = Aluno(id = aluno[0],
+                                nome = aluno[1],
+                                sobrenome = aluno[2],
+                                celular = mascara_celular(aluno[3]),
+                                cep = mascara_cep(aluno[4])
+                                )
+                self.ids.bigbox.add_widget(elemento)
         self.ids.Aluno.text = ''
 
 
-    def on_leave(self, *args):
-        self.ids.bigbox.clear_widgets()
-        self.ids.Aluno.text = ''
-
-
-class ExcluiAlunoTela(Screen):
-    
-    def busca(self):
-        aluno = self.ids.Aluno.text
-        encontrados = Escolabd.encontra_aluno(aluno, from_layout = True)
-        for aluno in encontrados:
-            elemento = Aluno(id = aluno[0],
-                            nome = aluno[1],
-                            sobrenome = aluno[2],
-                            celular = mascara_celular(aluno[3]),
-                            cep = mascara_cep(aluno[4])
-                            )
-            self.ids.bigbox.add_widget(elemento)
-
-   
     def on_leave(self, *args):
         self.ids.bigbox.clear_widgets()
         self.ids.Aluno.text = ''
@@ -192,5 +177,14 @@ class ExcluiAlunoTela(Screen):
 class Escola(App):
     def build(self):
         return Gerenciador()
+
+def AlunoNaoEncontrado(*args, **kwargs):
+    pop = Popup(title= 'Algo de errado não está certo...', 
+                content = Label(text = '''Infelizmente não encontramos\n o(a) aluno(a) que procurava. Tente novamente.'''),
+                                size_hint = (None, None),
+                                size = (400,150)
+                            )
+
+    pop.open()
 
 Escola().run()
