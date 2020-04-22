@@ -210,7 +210,7 @@ def deleta_usuario(delete = False, from_layout = False):
             encontra_aluno(delete, True)
 
     if delete.isnumeric():
-        if verifica_exclusao():
+        if verifica_exclusao(from_layout= from_layout):
             cursor.execute(f'''
                 DELETE FROM alunos
                 WHERE id = '{delete}'            
@@ -218,7 +218,7 @@ def deleta_usuario(delete = False, from_layout = False):
             if cursor.rowcount == -1:
                 print('\033[34mAluno(a) não encontrado(a).\033[m')
     else:
-        if verifica_exclusao():
+        if verifica_exclusao(from_layout= from_layout):
             cursor.execute(f'''
                 DELETE FROM alunos
                 WHERE nome = '{delete}'

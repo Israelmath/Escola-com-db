@@ -6,6 +6,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.popup import Popup
 from kivy.uix.image import Image
 from kivy.core.window import Window
+from Calendar import Calendario
 from Individuos import Usuario
 from Verificadores import mascara_celular, mascara_cep, certifica_cep
 from random import randint
@@ -17,8 +18,12 @@ connection = sqlite3.connect('Alunos.db')
 cursor = connection.cursor()
 
 class Gerenciador(ScreenManager):
+
     def Sair(self, *args, **kwargs):
         MenuInicial.confirmacao(self, *args, **kwargs)
+
+class Calendar(Calendario):
+    pass
 
 class MenuInicial(Screen):
 
@@ -60,10 +65,6 @@ class MenuInicial(Screen):
         if key == 27:
             App.get_running_app().root.current = 'Tela inicial'
             return True
-        
-    def Nada(*args, **kwargs):
-        SemInformacao()
-
 
 
 class ListaAlunosTela(Screen):
@@ -104,6 +105,10 @@ class Aluno(BoxLayout):
         Escolabd.deleta_usuario(self.ids.Nome.text, from_layout= True)
         self.clear_widgets()
         self.canvas.before.clear()
+    
+    def confere_exclusao(self):
+        confirma_exclusao_popup(self)
+
 
 class AdicionaAlunoTela(Screen):
 
@@ -184,6 +189,31 @@ def AlunoNaoEncontrado(*args, **kwargs):
                                 size_hint = (None, None),
                                 size = (400,150)
                             )
+
+    pop.open()
+
+
+def confirma_exclusao_popup(self, *args, **kwargs):
+    aluno = self
+
+    def callback(instance, value):
+        if value == 'down':
+            Aluno.ExcluiDados(aluno)
+
+    box = BoxLayout()
+    pop = Popup(title= 'Algo de errado não está certo...', 
+            content = box,
+            size_hint = (None, None),
+            size = (400,150)
+                        )
+
+    botaosim = Button(text = 'Sim', on_release = pop.dismiss)
+    botaonao = Button(text = 'Não', on_release = pop.dismiss)
+
+    botaosim.bind(state = callback)
+
+    box.add_widget(botaosim)
+    box.add_widget(botaonao)
 
     pop.open()
 

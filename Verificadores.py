@@ -101,17 +101,19 @@ def verifica_senha(senha):
         return False
 
 
-def verifica_exclusao():
-
-    print('Você realmente deseja excluir o(a) aluno(a)? (S/n)')
-    if input().lower() == 's':
-        senha = input('Digite sua senha: ')
-        if verifica_senha(senha):
-            return True
+def verifica_exclusao(from_layout = False):
+    if not from_layout:
+        print('Você realmente deseja excluir o(a) aluno(a)? (S/n)')
+        if input().lower() == 's':
+            senha = input('Digite sua senha: ')
+            if verifica_senha(senha):
+                return True
+            else:
+                return False
         else:
             return False
     else:
-        return False
+        return True
 
 if __name__ == "__main__":
     pass
