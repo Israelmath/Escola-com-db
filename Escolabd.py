@@ -82,15 +82,23 @@ def guarda_no_bd(usuario):
     connection.commit()
 
 
-def imprime_usuarios_cadastrados():
+def imprime_usuarios_cadastrados(from_layout = False):
+    lista_de_alunos = []
+    
     cursor.execute(f'''
         SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
     ''')
     if cursor.rowcount == 0:
         print('Nenhum aluno encontrado')
     else:
-        for aluno in cursor.fetchall():
-            imprime_framework_de_aluno(aluno)
+        if not from_layout:
+            for aluno in cursor.fetchall():
+                imprime_framework_de_aluno(aluno)
+        else:
+            for aluno in cursor.fetchall():
+                lista_de_alunos.append(aluno)
+            return lista_de_alunos
+            
 
 
 def imprime_framework_de_aluno(aluno):

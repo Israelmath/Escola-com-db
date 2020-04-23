@@ -1,25 +1,49 @@
 <Calendar@Screen>:
     BoxLayout:
-        GridLayout:
-            cols: 3
-            BoxLayout:
-                Label:
-                    text: 'Teste 1'
-            BoxLayout:
-                Label:
-                    text: 'Teste 2'
-            BoxLayout:
-                Label:
-                    text: 'Teste 3'
-        GridLayout:
-            cols: 3
-            BoxLayout:
-                Label:
-                    text: 'Teste 4'
-            BoxLayout:
-                Label:
-                    text: 'Teste 5'
-            BoxLayout:
-                Label:
-                    text: 'Teste 6'
-            
+        canvas:
+            Color:
+                rgba: 224/255,228/255,204/255,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        BoxLayout:
+            orientation: 'vertical'
+            ActionBar:
+                canvas:
+                    Color:
+                        rgba: 74/245, 188/245, 150/245,1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                ActionView:
+                    ActionPrevious:
+                        title: 'Adiciona aluno(a)'
+                        color: 0.1,0.1,0.1
+                        on_release: app.root.current = 'Tela inicial'
+                    ActionButton:
+                        text: 'Sair'
+                        color: 0.1,0.1,0.1
+                        on_release: app.root.Sair()
+            GridLayout:
+                cols: 3
+                BoxLayout:
+                    Label:
+                        text: 'Teste 1'
+                BoxLayout:
+                    Label:
+                        text: 'Teste 2'
+                BoxLayout:
+                    Label:
+                        text: 'Teste 3'
+            GridLayout:
+                cols: 3
+                BoxLayout:
+                    Label:
+                        text: 'Teste 4'
+                BoxLayout:
+                    Label:
+                        text: 'Teste 5'
+                BoxLayout:
+                    Label:
+                        text: 'Teste 6'
+                

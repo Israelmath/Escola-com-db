@@ -1,0 +1,94 @@
+<BoxAluno>
+    BoxLayout:
+        spacing: 10
+        BoxLayout:
+            id: box
+            orientation: 'vertical'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_x: None
+                width: 60
+                Label:
+                    id: Identificador
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 22
+                    color: 0,0,0
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1,1
+                Label:
+                    id: Nome
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 30
+                    color: 0,0,0
+                Label:
+                    id: Sobrenome
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 30
+                    color: 0,0,0
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_x: None
+                width: 275
+                Label:
+                    id: Celular
+                    halign: 'left'
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 18
+                    color: 0,0,0
+                Label:
+                    id: Cep
+                    font_name: 'Fonts/UbuntuMono-R'
+                    font_size: 18
+                    color: 0,0,0
+        BoxLayout:
+            orientation: 'horizontal'
+            pos_hint: {'center_x': 1}
+            padding: [50, 0, 0, 0]
+            Button:
+                background_normal: 'Images/information.png'
+                size_hint: None, None
+                width: 30
+                height: 30
+                pos_hint: {'center_y': .5}
+                border: 0,0,0,0
+            Button:
+                background_normal: 'Images/excluir.png'
+                size_hint: None, None
+                width: 30
+                height: 30
+                pos_hint: {'center_y': .5}
+                border: 0,0,0,0
+                on_release: root.confere_exclusao()
+
+
+<BoxAluno>
+    canvas.before:
+        Color:
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.x, self.y
+            size: self.width-self.height/2, self.height
+        Ellipse:
+            pos: self.x+self.width-self.height, self.y
+            size: self.height, self.height
+    size_hint_y: None
+    size_hint_x: None
+    height: 100
+    width: 400
+    
+
+<BoxAlunoEsq>
+    canvas.before:
+        Color:
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.x+self.height/2, self.y
+            size: self.width-self.height/2, self.height
+        Ellipse:
+            pos: self.x, self.y
+            size: self.height, self.height
+    size_hint_y: None
+    size_hint_x: None
+    height: 100
+    width: 500

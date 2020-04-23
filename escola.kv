@@ -78,7 +78,7 @@
             ActionBar:
                 canvas:
                     Color:
-                        rgba: 243/255,134/255,48/255,1
+                        rgba: 74/245, 188/245, 150/245,1
                     Rectangle:
                         pos: self.pos
                         size: self.size
@@ -94,7 +94,7 @@
             BoxLayout:
                 orientation: 'vertical'
                 spacing: 20
-                BgTexto:
+                BgTextoDir:
                     padding_y: 2
                     text: 'Inserindo aluno(a) no Banco de dados'
                     font_name: 'Fonts/UbuntuMono-R'
@@ -273,13 +273,15 @@
                     text: 'Sair'
                     color: 0.1,0.1,0.1
                     on_release: app.root.Sair()
-        ScrollView:
-            BoxLayout:
-                orientation: 'vertical'
-                spacing: 1
-                id: bigbox
-                size_hint_y: None 
-                height: self.minimum_height
+        BoxLayout:
+            orientation: 'horizontal'
+            ScrollView:
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 1
+                    id: bigbox
+                    size_hint_y: None 
+                    height: self.minimum_height
                 
 
 <BuscaAlunoTela@Screen>:
@@ -295,7 +297,7 @@
         ActionBar:
             canvas:
                 Color:
-                    rgb: 243/255,134/255,48/255
+                    rgb: 74/245, 188/245, 150/245
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -313,7 +315,7 @@
             BoxLayout:
                 orientation: 'vertical'
                 spacing: 20
-                BgTexto:
+                BgTextoDir:
                     text: 'Qual aluno deseja buscar?'
                     font_name: 'Fonts/UbuntuMono-R'
                     font_size: 29
@@ -347,6 +349,13 @@
                             id: bigbox
                             size_hint_y: None 
                             height: self.minimum_height
+                    ScrollView:
+                        BoxLayout:
+                            orientation: 'vertical'
+                            spacing: 1
+                            id: bigbox
+                            size_hint_y: None 
+                            height: self.minimum_height
 
                     
 <BotaoInicial@ButtonBehavior+Label>
@@ -364,74 +373,7 @@
             size: self.width-self.height,self.height
 
 
-<Aluno>
-    canvas.before:
-        Color:
-            rgba: 1,1,1,1
-        Rectangle:
-            pos: self.x, self.y
-            size: self.width-self.height/2, self.height
-        Ellipse:
-            pos: self.x+self.width-self.height, self.y
-            size: self.height, self.height
-    size_hint_y: None
-    size_hint_x: None
-    height: 100
-    width: 500
-    BoxLayout:
-        BoxLayout:
-            id: box
-            orientation: 'vertical'
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint_x: None
-                width: 60
-                Label:
-                    id: Identificador
-                    font_name: 'Fonts/UbuntuMono-R'
-                    font_size: 22
-                    color: 0,0,0
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: 1,1
-                Label:
-                    id: Nome
-                    font_name: 'Fonts/UbuntuMono-R'
-                    font_size: 30
-                    color: 0,0,0
-                Label:
-                    id: Sobrenome
-                    font_name: 'Fonts/UbuntuMono-R'
-                    font_size: 30
-                    color: 0,0,0
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint_x: None
-                width: 275
-                Label:
-                    id: Celular
-                    halign: 'left'
-                    font_name: 'Fonts/UbuntuMono-R'
-                    font_size: 18
-                    color: 0,0,0
-                Label:
-                    id: Cep
-                    font_name: 'Fonts/UbuntuMono-R'
-                    font_size: 18
-                    color: 0,0,0
-        AnchorLayout:
-            anchor_x: 'center'
-            Button:
-                background_normal: 'Images/excluir.png'
-                size_hint: None, None
-                width: 30
-                height: 30
-                border: 0,0,0,0
-                on_release: root.confere_exclusao()
-
-
-
-<BgTexto@Label>
+<BgTextoDir@Label>
     canvas.before:
         Color:
             rgb: 250/255,105/255,0
@@ -447,3 +389,14 @@
         Rectangle:
             pos: self.x+self.width-40, self.y+20
             size: 40,self.height-40
+
+<BgTextoEsq@Label>
+    canvas.before:
+        Color:
+            rgb: 250/255,105/255,0
+        Ellipse:
+            pos: self.pos
+            size: 40,40
+        Rectangle:
+            pos: self.x+self.height/2, self.y
+            size: self.width-self.height/2, self.height

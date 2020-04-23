@@ -6,16 +6,15 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.popup import Popup
 from kivy.uix.image import Image
 from kivy.core.window import Window
+from kivy.lang import Builder
+from os.path import join, dirname
 from Calendar import Calendario
 from Individuos import Usuario
 from Verificadores import mascara_celular, mascara_cep, certifica_cep
 from random import randint
 import Escolabd
-import sqlite3
 
-connection = sqlite3.connect('Alunos.db')
-
-cursor = connection.cursor()
+Builder.load_file(join(dirname(__file__), 'Aluno.kv'))
 
 class Gerenciador(ScreenManager):
 
@@ -71,28 +70,26 @@ class ListaAlunosTela(Screen):
     def on_pre_enter(self, *args, **kwargs):
         self.atualiza()
         
-        
-    def atualiza(self, *args, **kwargs):    
-        cursor.execute(f'''
-            SELECT id, nome, sobrenome, celular, cep, endereco, bairro FROM alunos
-        ''')
-        if cursor.rowcount == 0:
-            print('Nenhum aluno encontrado')
+
+    def atualiza(self, *args, **kwargs):
+        lista_de_alunos = Escolabd.imprime_usuarios_cadastrados(from_layout= True)
+        if len(lista_de_alunos) <= 0:
+            print('Não temos alunos cadastrados')
         else:
-            for aluno in cursor.fetchall():
-                self.ids.bigbox.add_widget(Aluno(id = aluno[0],
+            for aluno in lista_de_alunos:
+                self.ids.bigbox.add_widget(BoxAluno(id = aluno[0],
                                                 nome = aluno[1],
                                                 sobrenome = aluno[2],
                                                 celular = mascara_celular(aluno[3]),
                                                 cep = mascara_cep(aluno[4])
                                                 )
-                                            )
+                                        )
 
     def on_leave(self, *args):
         self.ids.bigbox.clear_widgets()
 
 
-class Aluno(BoxLayout):
+class BoxAluno(BoxLayout):
     def __init__(self, id, nome, sobrenome, celular, cep, **kwargs):
         super().__init__()
         self.ids.Identificador.text = id
@@ -164,7 +161,7 @@ class BuscaAlunoTela(Screen):
             AlunoNaoEncontrado()
         else:
             for aluno in encontrados:
-                elemento = Aluno(id = aluno[0],
+                elemento = BoxAluno(id = aluno[0],
                                 nome = aluno[1],
                                 sobrenome = aluno[2],
                                 celular = mascara_celular(aluno[3]),
@@ -198,22 +195,30 @@ def confirma_exclusao_popup(self, *args, **kwargs):
 
     def callback(instance, value):
         if value == 'down':
-            Aluno.ExcluiDados(aluno)
+            BoxAluno.ExcluiDados(aluno)
 
-    box = BoxLayout()
-    pop = Popup(title= 'Algo de errado não está certo...', 
-            content = box,
+    bigbox = BoxLayout(orientation = 'vertical')
+    boxbotoes = BoxLayout(spacing = 10)
+    pop = Popup(title= 'Algo perigoso está prestes de acontecer...', 
+            content = bigbox,
             size_hint = (None, None),
-            size = (400,150)
-                        )
+            size = (500,250)
+            )
+    mensagem = Label(text = 'Tem certeza que deseja \nexcluir o(a) aluno(a): \n{} {}'.format(aluno.ids.Nome.text,aluno.ids.Sobrenome.text), 
+                    font_size = 25,
+                    font_name = 'Fonts/UbuntuMono-R'
+                )
 
-    botaosim = Button(text = 'Sim', on_release = pop.dismiss)
-    botaonao = Button(text = 'Não', on_release = pop.dismiss)
+    botaosim = Button(text = 'Sim', size_hint= (0.4,0.6), on_release = pop.dismiss)
+    botaonao = Button(text = 'Não', size_hint= (0.4,0.6), on_release = pop.dismiss)
 
     botaosim.bind(state = callback)
 
-    box.add_widget(botaosim)
-    box.add_widget(botaonao)
+    boxbotoes.add_widget(botaosim)
+    boxbotoes.add_widget(botaonao)
+
+    bigbox.add_widget(mensagem)
+    bigbox.add_widget(boxbotoes)
 
     pop.open()
 
